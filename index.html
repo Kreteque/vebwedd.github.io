@@ -559,8 +559,8 @@
 
 	<div class="gototop js-top">
 
-		<audio id="track">
-			<source src="" type="audio/mpeg" autoplay loop />
+		<audio id="track" autoplay>
+			<source src="" type="audio/mpeg"/>
 		  </audio>
 		  
 		  <div id="player-container">
@@ -609,7 +609,25 @@
 		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 	</div>
 
-	
+	<div class="modal fade bd-example-modal-sm" role="dialog" id="onload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> <!-- Add this line to your code -->
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-center" id="exampleModalLabel">Izinkan situs kami memutar audio? <br>
+						 <button id="consent" type="button" class="btn btn-primary" data-dismiss="modal">Ya</button>
+						 <button id="consent2" type="button" class="btn btn-default" data-dismiss="modal">Jangan</button>
+					</h5>
+					
+				</div>
+				<!-- <div class="modal-body">
+					This site uses cookies to personalies the content for you.
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div> -->
+			</div>
+		</div>
+	</div> <!-- And the relavant closing div tag -->
 
 	
 	
@@ -639,7 +657,7 @@
 
 	<script>
 		menuClick = function (){
-		console.log('clicked')
+		// console.log('clicked')
 		var menu = $("#js-fh5co-nav-toggle fh5co-nav-toggle fh5co-nav-white active");
 		if (menu) {
 			$('.js-fh5co-nav-toggle').removeClass('active');
@@ -647,6 +665,10 @@
 		}
 	
 		}
+
+		window.onload = () => {
+        $('#onload').modal('show');
+    	}
 
 		document.addEventListener("DOMContentLoaded", (event) => {
   const controlBtn = document.getElementById("play-pause");
@@ -658,7 +680,9 @@
     source = controlBtn.getAttribute("data-audio"),
     leftTimer = document.getElementById("is-left"),
     rightTimer = document.getElementById("is-right"),
-    repeatButton = document.getElementsByClassName("icon-repeat");
+    repeatButton = document.getElementsByClassName("icon-repeat"),
+	consent = document.getElementById('consent'),
+	consent2 = document.getElementById('consent2');
 
   if (!track) return;
 
@@ -673,7 +697,6 @@
 
   function playPause() {
     null === track.getAttribute("src") ? track.setAttribute("src", source) : "";
-
     if (track.paused) {
       track.play();
       controlBtn.className = "pause";
@@ -682,7 +705,8 @@
       controlBtn.className = "play";
     }
   }
-  window.addEventListener("load", playPause);
+  consent.addEventListener("click", playPause);
+  consent2.addEventListener("click", playPause);
   controlBtn.addEventListener("click", playPause);
 
   track.addEventListener("ended", function () {
