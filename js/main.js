@@ -3,7 +3,6 @@
 	'use strict';
 
 	var mobileMenuOutsideClick = function() {
-
 		$(document).click(function (e) {
 	    var container = $("#fh5co-offcanvas, .js-fh5co-nav-toggle");
 	    if (!container.is(e.target) && container.has(e.target).length === 0) {
@@ -28,10 +27,10 @@
 		var clone2 = $('.menu-2 > ul').clone();
 		$('#fh5co-offcanvas').append(clone2);
 
-		$('#fh5co-offcanvas .has-dropdown').addClass('offcanvas-has-dropdown');
-		$('#fh5co-offcanvas')
-			.find('li')
-			.removeClass('has-dropdown');
+		// $('#fh5co-offcanvas .has-dropdown').addClass('offcanvas-has-dropdown');
+		// $('#fh5co-offcanvas')
+		// 	.find('li')
+		// 	.removeClass('has-dropdown');
 
 		// Hover dropdown menu on mobile
 		$('.offcanvas-has-dropdown').mouseenter(function(){
@@ -54,7 +53,6 @@
 		$(window).resize(function(){
 
 			if ( $('body').hasClass('offcanvas') ) {
-
     			$('body').removeClass('offcanvas');
     			$('.js-fh5co-nav-toggle').removeClass('active');
 				
@@ -71,6 +69,7 @@
 
 			if ( $('body').hasClass('overflow offcanvas') ) {
 				$('body').removeClass('overflow offcanvas');
+				
 			} else {
 				$('body').addClass('overflow offcanvas');
 			}

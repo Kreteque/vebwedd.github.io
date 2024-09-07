@@ -78,10 +78,10 @@
 				</div>
 				<div class="col-xs-10 text-right menu-1">
 					<ul>
-						<li class="active"><a href="#fh5co-couple">Hello</a></li>
+						<li class="active"><a onclick="menuClick()" href="#fh5co-couple">Hello</a></li>
 						<!-- <li><a href="#fh5co-couple-story">Kisah Kita</a></li> -->
 						<li class="has-dropdown">
-							<a href="#fh5co-event">Acara</a>
+							<a onclick="menuClick()"  href="#fh5co-event">Acara</a>
 							<!-- <ul class="dropdown">
 								<li><a href="#">Web Design</a></li>
 								<li><a href="#">eCommerce</a></li>
@@ -90,7 +90,7 @@
 							</ul> -->
 						</li>
 						<li class="has-dropdown">
-							<a href="#fh5co-gallery">Galeri</a>
+							<a onclick="menuClick()"  href="#fh5co-gallery">Galeri</a>
 							<!-- <ul class="dropdown">
 								<li><a href="#">HTML5</a></li>
 								<li><a href="#">CSS3</a></li>
@@ -514,7 +514,7 @@
 
 
 	<div id="fh5co-started" class="fh5co-bg" style="background-image:url(images/img_bg_4.jpg);">
-		<div class="overlay"></div>
+		<!-- <div class="overlay"></div> -->
 		<div class="container">
 			<div class="row animate-box">
 				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
@@ -553,12 +553,65 @@
 			</div>
 
 		</div>
+	
 	</footer>
 	</div>
 
 	<div class="gototop js-top">
+
+		<audio id="track">
+			<source src="" type="audio/mpeg" autoplay loop />
+		  </audio>
+		  
+		  <div id="player-container">
+		  
+			<!-- Progress -->
+			<div id="timeline">
+			  <div id="scrub"></div>
+			  <div id="playhead"></div>
+			</div>
+		  
+			<!-- Play button -->
+			<div id="play-pause" class="play" data-audio="audio/IWannaGrowOldwithYou.mp3">Play
+			</div>
+		  
+			<!-- Artist Thumb-->
+			<div id="thumb"></div>
+		  
+			<div class="item-inner">
+			  <!-- Title-->
+			  <div class="item-title">I Wanna Grow Old With You</div>
+			  <div class="item-subtitle">Westlife </div>
+		  
+			  <!-- Time -->
+			  <div id="time-bar">
+				<div id="time-holder">
+				  <div id="is-left">
+					<span id="current-time">
+					  00:00
+					</span>
+				  </div>
+				  <div id="is-right">
+					<span id="duration-time">
+					  <span class="duration-minutes" data-duration-minutes="true">0</span>:<span class="duration-minutes" data-duration-seconds="true">00</span>
+					</span>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  
+			<!--Repeat Button-->
+			<!-- <div class="repeat-button">
+			  <div id="repeat" class="icon-repeat" repeat="0"></div>
+			</div> -->
+		  </div>
+
 		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 	</div>
+
+	
+
+	
 	
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
@@ -585,6 +638,145 @@
 	<script src="js/main.js"></script>
 
 	<script>
+		menuClick = function (){
+		console.log('clicked')
+		var menu = $("#js-fh5co-nav-toggle fh5co-nav-toggle fh5co-nav-white active");
+		if (menu) {
+			$('.js-fh5co-nav-toggle').removeClass('active');
+			$('body').removeClass('offcanvas');
+		}
+	
+		}
+
+		document.addEventListener("DOMContentLoaded", (event) => {
+  const controlBtn = document.getElementById("play-pause");
+  let track = document.getElementById("track"),
+    duration = track.duration, // Duration of audio clip (NaN here as the track is not loaded)
+    playhead = document.getElementById("playhead"), // playhead
+    timeline = document.getElementById("timeline"), // timeline
+    timelineWidth = timeline.offsetWidth - playhead.offsetWidth,
+    source = controlBtn.getAttribute("data-audio"),
+    leftTimer = document.getElementById("is-left"),
+    rightTimer = document.getElementById("is-right"),
+    repeatButton = document.getElementsByClassName("icon-repeat");
+
+  if (!track) return;
+
+  // Update the track duration when the track is loaded.
+  track.addEventListener(
+    "canplaythrough",
+    function () {
+      duration = track.duration;
+    },
+    false
+  );
+
+  function playPause() {
+    null === track.getAttribute("src") ? track.setAttribute("src", source) : "";
+
+    if (track.paused) {
+      track.play();
+      controlBtn.className = "pause";
+    } else {
+      track.pause();
+      controlBtn.className = "play";
+    }
+  }
+  window.addEventListener("load", playPause);
+  controlBtn.addEventListener("click", playPause);
+
+  track.addEventListener("ended", function () {
+    controlBtn.className = "play";
+    track.currentTime = 0; // reset the playhead
+
+    // Let's check if the repeat button is on, then play the track again.
+    let times = repeatButton[0].getAttribute("repeat");
+    if (times > 0) {
+      controlBtn.className = "";
+      controlBtn.className = "pause";
+      track.play();
+    }
+  });
+
+  // timeupdate event listener
+  track.addEventListener("timeupdate", timeUpdate, false);
+
+  // makes timeline clickable
+  timeline.addEventListener(
+    "click",
+    function (event) {
+      moveplayhead(event);
+      track.currentTime = duration * clickPercent(event);
+    },
+    false
+  );
+
+  // Moves playhead as user clicks
+  function moveplayhead(event) {
+    let newMargLeft = event.clientX - getPosition(timeline);
+
+    if (newMargLeft >= 0 && newMargLeft <= timelineWidth) {
+      playhead.style.marginLeft = newMargLeft + "px";
+    }
+    if (newMargLeft < 0) {
+      playhead.style.marginLeft = "0px";
+    }
+    if (newMargLeft > timelineWidth) {
+      playhead.style.marginLeft = timelineWidth + "px";
+    }
+  }
+
+  function getPosition(el) {
+    return el.getBoundingClientRect().left;
+  }
+
+  // returns decimal number of the total timelineWidth
+  function clickPercent(event) {
+    return (event.clientX - getPosition(timeline)) / timelineWidth;
+  }
+
+  // Time update
+  function timeUpdate() {
+    let playPercent = timelineWidth * (track.currentTime / duration);
+    playhead.style.marginLeft = playPercent + "px";
+    scrub.style.width = playPercent + "px";
+
+    // Current time
+    document.getElementById("duration-time").innerHTML = formatSecondsAsTime(
+      duration
+    );
+    document.getElementById("current-time").innerHTML = formatSecondsAsTime(
+      Math.floor(track.currentTime)
+    );
+  }
+
+  // Synchronizes playhead position with current point in audio
+  function formatSecondsAsTime(secs, format) {
+    let hr = Math.floor(secs / 3600);
+    let min = Math.floor((secs - hr * 3600) / 60);
+    let sec = Math.floor(secs - hr * 3600 - min * 60);
+
+    if (min < 10) {
+      min = "0" + min;
+    }
+    if (sec < 10) {
+      sec = "0" + sec;
+    }
+
+    return min + ":" + sec;
+  }
+
+  // Repeat
+  repeatButton[0].onclick = function () {
+    repeatButton[0].setAttribute("repeat", 0);
+    repeatButton[0].classList.toggle("icon-repeat-again");
+
+    if (repeatButton[0].classList.contains("icon-repeat-again")) {
+      repeatButton[0].setAttribute("repeat", 1);
+    }
+  };
+});
+
     var d = new Date(new Date().getTime() + 200 * 120 * 120 * 2000);
 
     // default example
