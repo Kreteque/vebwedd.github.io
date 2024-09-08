@@ -89,6 +89,15 @@
 								<li><a href="#">API</a></li>
 							</ul> -->
 						</li>
+						<li class="has-dropdown"></li>
+							<a onclick="menuClick()"  href="#fh5co-couple-story">Send Gift</a>
+							<!-- <ul class="dropdown">
+								<li><a href="#">Web Design</a></li>
+								<li><a href="#">eCommerce</a></li>
+								<li><a href="#">Branding</a></li>
+								<li><a href="#">API</a></li>
+							</ul> -->
+						</li>
 						<li class="has-dropdown">
 							<a onclick="menuClick()"  href="#fh5co-gallery">Galeri</a>
 							<!-- <ul class="dropdown">
@@ -228,18 +237,22 @@
 		</div>
 	</div>
 
-	<!-- <div id="fh5co-couple-story">
+	<div id="fh5co-couple-story">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading animate-box">
+				<!-- <div class="col-md-8 col-md-offset-2 text-center fh5co-heading animate-box">
 					<span>We Love Each Other</span>
 					<h2>Our Story</h2>
 					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+				</div> -->
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading animate-box">
+					<span>Let's keep on giving</span>
+					<h2>Send Gift</h2>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12 col-md-offset-0">
-					<ul class="timeline animate-box">
+
+					<!-- <ul class="timeline animate-box">
 						<li class="animate-box">
 							<div class="timeline-badge" style="background-image:url(images/couple-1.jpg);"></div>
 							<div class="timeline-panel">
@@ -276,11 +289,37 @@
 								</div>
 							</div>
 						</li>
-			    	</ul>
-				</div>
+			    	</ul> -->
+					
+					  <div class="container">
+						<div class="row animate-box">
+							
+								<div class="col-md-6 col-sm-6 col-md-offset-3 text-center">
+									<div class="base">
+										<p class="BCA" >Vebriyan Syahputra</p>
+										<span class="mail-info">
+											<img style="width: 60ox; height: 40px;" src="https://cdn3.iconfinder.com/data/icons/banks-in-indonesia-logo-badge/100/BCA-512.png" alt="eMail Icon">
+											<span class="mail-text" tooltip="Click to Copy" tooltip-position="bottom">6340376712</span>
+											
+										</span> <br>
+
+										<p class="BCA" >Riska Arsita Sari</p>
+										<span class="mail-info">
+											<img style="width: 60ox; height: 40px;" src="https://cdn3.iconfinder.com/data/icons/banks-in-indonesia-logo-badge/100/Mandiri-512.png" alt="eMail Icon">
+											<span class="mail-text" tooltip="Click to Copy" tooltip-position="bottom">1660004506200</span>
+											
+										</span>
+									</div>
+								</div>
+
+								
+							
+						</div>
+					</div>
+				
 			</div>
 		</div>
-	</div> -->
+	</div>
 
 	<div id="fh5co-gallery" class="fh5co-section-gray">
 		<div class="container">
@@ -628,8 +667,6 @@
 			</div>
 		</div>
 	</div> <!-- And the relavant closing div tag -->
-
-	
 	
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
@@ -817,6 +854,39 @@
         day: d.getDate(),
         enableUtc: false
     });
+
+	const copyMailId = document.querySelectorAll('.mail-text');
+
+copyMailId.forEach(copyText => {
+    copyText.addEventListener('click', () => {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(copyText);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        try {
+            document.execCommand('copy');
+            selection.removeAllRanges();
+
+            const mailId = copyText.textContent;
+            copyText.textContent = 'Copied!';
+            copyText.classList.add('success');
+
+            setTimeout(() => {
+                copyText.textContent = mailId;
+                copyText.classList.remove('success');
+            }, 1000);
+        } catch (e) {
+            copyText.textContent = 'Couldn\'t copy, hit Ctrl+C!';
+            copyText.classList.add('error');
+
+            setTimeout(() => {
+                errorMsg.classList.remove('show');
+            }, 1200);
+        }
+    });
+});
 </script>
 
 	</body>

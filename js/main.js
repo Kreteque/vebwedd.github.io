@@ -169,9 +169,10 @@
 		});
 
 		$(window).scroll(function(){
-
+			
 			var $win = $(window);
-			if ($win.scrollTop() > 200) {
+			// console.log($win.scrollTop());
+			if ($win.scrollTop() > 200 && $win.scrollTop() < 5781) {
 				$('.js-top').addClass('active');
 			} else {
 				$('.js-top').removeClass('active');
